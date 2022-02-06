@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出 -->
+<!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
+<!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
+<!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
+<configuration  scan="true" scanPeriod="60 seconds">
+
+    <!--打印到控制台-->
+    <appender name="CONSOLE"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>trace</level>
+        </filter>
+        <!-- 打印规则 -->
+        <encoder>
+            <Pattern>%date [%-5p] [%thread] %logger{60} [%file : %line] %msg%n</Pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 打印到文件当中 -->
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定文件名称 -->
+        <File>C:/Users/cmm/Desktop/文档/log/springboot-logback.log</File>
+        <!-- 指定打印打印规则 -->
+        <encoder>
+            <Pattern>%date [%-5p] [%thread] %logger{60} [%file : %line] %msg%n</Pattern>
+        </encoder>
+        <!--
+            添加.gz 历史日志会开启亚索 大大缩小日志文件所占用的空间
+         -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--
+                最多保存多少天
+             -->
+            <fileNamePattern>C:/Users/cmm/Desktop/文档/log/springboot-logback.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 默认是全局都打印 表示只给数据持久层添加打印日志 -->
+    <logger name="com.bjpowernode.mapper" level="DEBUG"></logger>
+
+    <!-- 必须在这里配置appender 否则appender不生效
+         如果root标签配置了日志级别那么就以root为准
+         如果root标签没有配置日志级别那么按照appender自己的日志级别为准
+         注意:
+            就算root没有设置日志级别默认也是deg级别
+            只有appender比root的日志级别高 配置appender才有意义
+         标签         日志级别    最终的日志级别
+         root        TRACE      trans
+         appender    TRACE
+
+         root        空          deg
+         appender    info
+    -->
+    <root level="TRACE">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

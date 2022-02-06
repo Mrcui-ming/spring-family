@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.educenter.mapper.UcenterMemberMapper">
+
+    <!-- date函数会取字段的前半部分数据 比例2020-10-10 10:00:00 那么便是2020-10-10-->
+    <select id="getMemberCount" resultType="java.lang.Integer">
+         SELECT COUNT(*) FROM ucenter_member uc WHERE DATE(uc.gmt_create)=#{day}
+    </select>
+
+</mapper>
